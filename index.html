@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortnite Button</title>
+    <style>
+        /* General Body and Background */
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            color: white;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Loading Screen Styles */
+        #loadingScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 1.5em;
+            text-align: center;
+            z-index: 1000;
+            animation: fadeIn 1s ease;
+        }
+
+        /* Background Animation (Hackerman style) */
+        @keyframes flow {
+            0% { background-position: 0 0; }
+            100% { background-position: 100% 100%; }
+        }
+        
+        body {
+            background: linear-gradient(90deg, #00ff00 25%, transparent 25%) 0 0, linear-gradient(90deg, #00ff00 25%, transparent 25%) 50% 50%;
+            background-size: 50px 50px;
+            animation: flow 2s linear infinite;
+        }
+
+        /* Progress bar container */
+        #progressBarContainer {
+            width: 80%;
+            background-color: #444;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            height: 30px;
+        }
+
+        /* Progress bar */
+        #progressBar {
+            width: 0;
+            height: 100%;
+            background-color: #00ff00;
+            transition: width 0.1s linear;
+        }
+
+        /* Button Styles */
+        button {
+            background-color: #1d1f20;
+            border: 2px solid #00ff00;
+            padding: 20px 40px;
+            font-size: 2em;
+            color: #00ff00;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2000;
+        }
+
+        button:hover {
+            background-color: #00ff00;
+            color: #1d1f20;
+            transform: scale(1.1);
+        }
+
+        /* Hidden button initially */
+        .hidden {
+            display: none;
+        }
+
+        /* Dark mode toggle button */
+        #darkModeToggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #1d1f20;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 3000;
+        }
+
+        #darkModeToggle:hover {
+            background-color: #00ff00;
+            color: #1d1f20;
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingScreen">
+        <div id="loadingText"></div>
+        <div id="progressBarContainer">
+            <div id="progressBar"></div>
+        </div>
+    </div>
+    <button id="fortniteBtn" class="hidden">Fortnite</button>
+    <button id="darkModeToggle">Toggle Dark Mode</button>
+
+    <script>
+        // Check if uBlock Origin is installed
+        function checkUblock() {
+    const uBlockInstalled = localStorage.getItem("uBlockInstalled");
+    if (!uBlockInstalled) {
+        const testElement = document.createElement('div');
+        testElement.className = 'ublock-test';
+        testElement.style.display = 'none';
+        document.body.appendChild(testElement);
+
+        // Try injecting a known ad blocker test element
+        setTimeout(() => {
+            if (testElement.offsetHeight === 0) {  // If the element is blocked
+                alert("uBlock Origin is likely installed.");
+            } else {
+                const installPrompt = confirm("It looks like you don't have uBlock Origin installed. Would you like to install it?");
+                if (installPrompt) {
+                    window.open('https://chromewebstore.google.com/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm', '_blank');
+                }
+            }
+            localStorage.setItem("uBlockInstalled", "true");
+            document.body.removeChild(testElement);
+        }, 1000);
+    }
+}
+
+
+  // Fake loading screen with progress bar and typing animation
+function fakeLoadingScreen() {
+    const progressBar = document.getElementById('progressBar');
+    const loadingText = document.getElementById('loadingText');
+    let progress = 0;
+
+    // Function to simulate a more realistic loading progress
+    function getRandomIncrement(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    const interval = setInterval(() => {
+        // Increment progress by a random amount (between 1 and 3 for more fluctuation)
+        progress += getRandomIncrement(1, 3);
+
+        // Make sure progress does not exceed 100%
+        if (progress > 100) {
+            progress = 100;
+        }
+
+        progressBar.style.width = progress + '%';
+
+        if (progress <= 40) {
+            loadingText.textContent = "Loading";
+        } else if (progress <= 60) {
+            loadingText.textContent = "Almost there...";
+        } else if (progress <= 80) {
+            loadingText.textContent = "Initializing...";
+        } else if (progress <= 90) {
+            loadingText.textContent = "Please wait...";
+        } else {
+            loadingText.textContent = "Finalizing...";
+        }
+
+        // Set the text color to black
+        loadingText.style.color = "black";
+
+        if (progress >= 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+                document.querySelector('#fortniteBtn').classList.remove('hidden');
+                document.getElementById('loadingScreen').style.display = 'none';
+            }, 500); // Hide loading screen and show button after 0.5s
+        }
+    }, 49.2); // Takes 4.92 seconds to reach 100%, but with randomness in increments
+}
+
+
+        // Function to cloaked redirect
+        function loadPage() {
+            const url = "https://proxy.migastep.com/en-US/play/games/fortnite/BT5P2X999VH2?__cpo=aHR0cHM6Ly93d3cueGJveC5jb20";
+            // Open about:blank, which is completely cloaked
+            const win = window.open("about:blank", "_blank");
+            setTimeout(() => {
+                win.location.href = url; // Redirects after opening the blank page
+            }, 100); // Delay to simulate cloaking
+            alert("Accessing the Fortnite Vault..."); // Easter egg
+        }
+
+        // Dark mode toggle functionality
+        function toggleDarkMode() {
+            const currentBgColor = document.body.style.backgroundColor;
+            if (currentBgColor === "black") {
+                document.body.style.backgroundColor = "white";
+                document.body.style.color = "black";
+            } else {
+                document.body.style.backgroundColor = "black";
+                document.body.style.color = "white";
+            }
+        }
+
+        // Start the fake loading screen, check uBlock, and show the button
+        window.onload = function() {
+            checkUblock(); // Check if uBlock Origin is installed
+            fakeLoadingScreen(); // Start the fake loading screen
+        };
+
+        // Button click event to trigger cloaked redirect
+        document.getElementById("fortniteBtn").addEventListener("click", function() {
+            loadPage();
+        });
+
+        // Dark mode toggle click event
+        document.getElementById("darkModeToggle").addEventListener("click", toggleDarkMode);
+    </script>
+</body>
+</html>
